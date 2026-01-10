@@ -31,8 +31,9 @@ This is a simple Point of Sale (POS) application built with React. It lists prod
 ### Sales Journal - Product Selection
 ![Product Selection](./screenshots/select_product.png)
 
-## Member Name
+## Members
 
 **Sithu Win San**
+
 **Aung Thura Hein**
 
