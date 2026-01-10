@@ -4,6 +4,12 @@
 
 This is a simple Point of Sale (POS) application built with React. It lists products, records sales transactions, and visualizes sales data on a dashboard. The application is designed to be intuitive and easy to use.
 
+## Members
+
+**Sithu Win San**
+
+**Aung Thura Hein**
+
 ## Features
 
 - **Dashboard**: View sales stats, trends, and top-selling items.
@@ -30,10 +36,4 @@ This is a simple Point of Sale (POS) application built with React. It lists prod
 
 ### Sales Journal - Product Selection
 ![Product Selection](./screenshots/select_product.png)
-
-## Members
-
-**Sithu Win San**
-
-**Aung Thura Hein**
 
