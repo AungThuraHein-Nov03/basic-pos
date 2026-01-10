@@ -1,0 +1,243 @@
+import React, { useState, useEffect, useMemo } from 'react';
+import { TransactionService } from '../services/storage.js';
+import {
+    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+    PieChart, Pie, Cell, Legend
+} from 'recharts';
+import {
+    startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth,
+    format, parseISO, isWithinInterval, subDays
+} from 'date-fns';
+
+const Dashboard = () => {
+    const [transactions, setTransactions] = useState([]);
+    const [statsPeriod, setStatsPeriod] = useState('monthly');
+    const [chartPeriod, setChartPeriod] = useState('monthly');
+
+    const PIE_COLORS = ['#000000', '#444444', '#888888', '#aaaaaa', '#cccccc', '#eeeeee'];
+
+    useEffect(() => {
+        const data = TransactionService.getTransactions();
+        setTransactions(data.sort((a, b) => new Date(a.date) - new Date(b.date)));
+    }, []);
+
+    const totalSalesAllTime = useMemo(() => {
+        return transactions.reduce((sum, t) => sum + t.totalPrice, 0);
+    }, [transactions]);
+
+    const currentPeriodSales = useMemo(() => {
+        const now = new Date();
+        let start, end;
+
+        if (statsPeriod === 'daily') {
+            start = startOfDay(now);
+            end = endOfDay(now);
+        } else if (statsPeriod === 'weekly') {
+            start = startOfWeek(now, { weekStartsOn: 1 });
+            end = endOfWeek(now, { weekStartsOn: 1 });
+        } else { // monthly
+            start = startOfMonth(now);
+            end = endOfMonth(now);
+        }
+
+        return transactions.filter(t => {
+            const d = parseISO(t.date);
+            return isWithinInterval(d, { start, end });
+        }).reduce((sum, t) => sum + t.totalPrice, 0);
+    }, [transactions, statsPeriod]);
+
+    const topItems = useMemo(() => {
+        const map = {};
+        transactions.forEach(t => {
+            if (!map[t.itemName]) map[t.itemName] = 0;
+            map[t.itemName] += t.quantity;
+        });
+
+        return Object.entries(map)
+            .map(([name, qty]) => ({ name, qty }))
+            .sort((a, b) => b.qty - a.qty)
+            .slice(0, 5);
+    }, [transactions]);
+
+    const lineChartData = useMemo(() => {
+        const dataMap = {};
+        const now = new Date();
+        const daysToLookBack = chartPeriod === 'monthly' ? 365 : 30;
+        const cutoff = subDays(now, daysToLookBack);
+
+        // 1. Generate all expected keys and initialize with 0 in chronological order
+        for (let i = daysToLookBack; i >= 0; i--) {
+            const date = subDays(now, i);
+            const key = chartPeriod === 'monthly'
+                ? format(date, 'MMM yyyy')
+                : format(date, 'MMM dd');
+            if (!dataMap[key]) dataMap[key] = 0;
+        }
+
+        // 2. Aggregate actual sales
+        transactions.forEach(t => {
+            const tDate = parseISO(t.date);
+            if (tDate >= cutoff) {
+                const key = chartPeriod === 'monthly'
+                    ? format(tDate, 'MMM yyyy')
+                    : format(tDate, 'MMM dd');
+                if (dataMap.hasOwnProperty(key)) {
+                    dataMap[key] += t.totalPrice;
+                }
+            }
+        });
+
+        // 3. Convert to array (Object.entries maintains insertion order, which is chronological here)
+        return Object.entries(dataMap).map(([name, value]) => ({ name, value }));
+    }, [transactions, chartPeriod]);
+
+    const pieChartData = useMemo(() => {
+        const map = {};
+        transactions.forEach(t => {
+            if (!map[t.category]) map[t.category] = 0;
+            map[t.category] += t.totalPrice;
+        });
+        return Object.entries(map).map(([name, value]) => ({ name, value }));
+    }, [transactions]);
+
+    return (
+        <div className="dashboard-container">
+            {/* Header */}
+            <div className="dashboard-header">
+                <h2 style={{ margin: 0, border: 'none' }}>Dashboard</h2>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>Sales Stats:</span>
+                    <div style={{ fontSize: '0.8rem' }}>
+                        {['daily', 'weekly', 'monthly'].map(p => (
+                            <button
+                                key={p}
+                                onClick={() => setStatsPeriod(p)}
+                                className="btn"
+                                style={{
+                                    marginLeft: '5px',
+                                    backgroundColor: statsPeriod === p ? 'black' : 'white',
+                                    color: statsPeriod === p ? 'white' : 'black',
+                                }}
+                            >
+                                {p}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* Stats */}
+            <div className="dashboard-stats">
+                <div className="card stat-card">
+                    <h3 style={{ fontSize: '0.9rem', margin: '0 0 5px 0' }}>Total Sales</h3>
+                    <p style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: 0 }}>{totalSalesAllTime.toLocaleString()}</p>
+                </div>
+                <div className="card stat-card">
+                    <h3 style={{ fontSize: '0.9rem', margin: '0 0 5px 0' }}>Sales ({statsPeriod})</h3>
+                    <p style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: 0 }}>{currentPeriodSales.toLocaleString()}</p>
+                </div>
+                <div className="card stat-card">
+                    <h3 style={{ fontSize: '0.9rem', margin: '0 0 5px 0' }}>Transactions</h3>
+                    <p style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: 0 }}>{transactions.length}</p>
+                </div>
+            </div>
+
+            {/* Main Charts Area */}
+            <div className="dashboard-main">
+
+                {/* Left Column: Line Chart */}
+                <div className="card chart-column-left">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                        <h3 style={{ fontSize: '1rem', margin: 0 }}>Sales Trend</h3>
+                        <div>
+                            {['daily', 'monthly'].map(p => (
+                                <button
+                                    key={p}
+                                    onClick={() => setChartPeriod(p)}
+                                    className="btn"
+                                    style={{
+                                        marginLeft: '5px',
+                                        backgroundColor: chartPeriod === p ? 'black' : 'white',
+                                        color: chartPeriod === p ? 'white' : 'black',
+                                    }}
+                                >
+                                    {p}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="chart-wrapper" style={{ minHeight: '450px' }}>
+                        <ResponsiveContainer width="100%" height={450} debounce={1}>
+                            <LineChart data={lineChartData} margin={{ top: 5, right: 30, left: 20, bottom: 25 }} style={{ fontFamily: 'Arial, sans-serif' }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
+                                <XAxis
+                                    dataKey="name"
+                                    stroke="black"
+                                    style={{ fontSize: '0.7rem', fontFamily: 'Arial' }}
+                                    label={{ value: 'Date', position: 'insideBottom', offset: -15, fontSize: '0.8rem', fontFamily: 'Arial' }}
+                                />
+                                <YAxis
+                                    stroke="black"
+                                    style={{ fontSize: '0.7rem', fontFamily: 'Arial' }}
+                                    label={{ value: 'Sales ($)', angle: -90, position: 'insideLeft', fontSize: '0.8rem', fontFamily: 'Arial' }}
+                                />
+                                <Tooltip contentStyle={{ fontFamily: 'Arial' }} />
+                                <Line type="monotone" dataKey="value" stroke="black" dot={{ r: 2 }} activeDot={{ r: 4 }} />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+
+                {/* Right Column: Top Items & Pie Chart */}
+                <div className="chart-column-right">
+
+                    {/* Top Items - Upper Half */}
+                    <div className="card top-items-wrapper">
+                        <h3 style={{ fontSize: '1rem', margin: '0 0 10px 0' }}>Top 5 Items</h3>
+                        <ul style={{ padding: 0, margin: 0, listStyle: 'none' }}>
+                            {topItems.map((item, idx) => (
+                                <li key={idx} style={{ marginBottom: '5px', paddingBottom: '2px', borderBottom: '1px solid #eee', fontSize: '0.9rem', display: 'flex', justifyContent: 'space-between' }}>
+                                    <span>{idx + 1}. {item.name}</span>
+                                    <strong>{item.qty}</strong>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Pie Chart - Lower Half */}
+                    <div className="card pie-chart-wrapper">
+                        <h3 style={{ fontSize: '1rem', margin: '0 0 5px 0' }}>By Category</h3>
+                        <div className="chart-wrapper">
+                            <ResponsiveContainer width="100%" height={250} debounce={1}>
+                                <PieChart style={{ fontFamily: 'Arial, sans-serif' }}>
+                                    <Pie
+                                        data={pieChartData}
+                                        cx="50%"
+                                        cy="50%"
+                                        outerRadius="60%"
+                                        fill="#8884d8"
+                                        dataKey="value"
+                                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                                        labelLine={true}
+                                        style={{ fontSize: '0.7rem', fontFamily: 'Arial' }}
+                                    >
+                                        {pieChartData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip wrapperStyle={{ fontSize: '0.8rem', fontFamily: 'Arial' }} contentStyle={{ fontFamily: 'Arial' }} />
+                                    <Legend wrapperStyle={{ fontSize: '0.7rem', fontFamily: 'Arial' }} />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    );
+};
+
+export default Dashboard;
