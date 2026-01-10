@@ -13,27 +13,26 @@ This is a simple Point of Sale (POS) application built with React. It lists prod
 
 ## Screenshots
 
-### Dashboard
-![Dashboard Screenshot](./screenshots/dashboard.png)
-*Overview of sales performance*
+### Dashboard - Overview & Daily Sales Chart
+![Overview](./screenshots/daily_chart.png)
 
-### Sales Journal
-![Sales Journal Screenshot](./screenshots/journal.png)
-*Transaction recording interface*
+### Dashboard - Monthly Sales Chart
+![Monthly Sales Chart](./screenshots/daily_sales.png)
 
-## How to Run
+### Dashboard - Weekly Sales
+![Weekly Sales](./screenshots/weekly_sales.png)
 
-1. Install dependencies:
-   ```
-   npm install
-   ```
+### Dashboard - Monthly Sales
+![Monthly Sales](./screenshots/monthly_sales.png)
 
-2. Start the application:
-   ```
-   npm run dev
-   ```
+### Sales Journal - Overview
+![Sales Journal](./screenshots/sales_journal.png)
+
+### Sales Journal - Product Selection
+![Product Selection](./screenshots/select_product.png)
 
 ## Member Name
 
-**LOQ** - 1234567
+**Sithu Win San**
+**Aung Thura Hein**
 
