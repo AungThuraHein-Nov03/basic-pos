@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { TransactionService } from '../services/storage.js';
+import '../components.css';
 
 const SalesJournal = () => {
     const [products, setProducts] = useState([]);
@@ -76,17 +77,17 @@ const SalesJournal = () => {
                 <div className="card journal-form">
                     <h3>New Entry</h3>
 
-                    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                    <form onSubmit={handleSubmit} className="journal-form-container">
 
-                        <div style={{ marginBottom: '5px' }}>
-                            <label style={{ display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer' }}>
+                        <div className="journal-custom-checkbox-container">
+                            <label className="journal-custom-checkbox-label">
                                 <input
                                     type="checkbox"
                                     name="isCustom"
                                     checked={formData.isCustom}
                                     onChange={handleInputChange}
                                 />
-                                <span style={{ fontSize: '0.9rem' }}>Custom Item / Expense</span>
+                                <span className="journal-custom-checkbox-text">Custom Item / Expense</span>
                             </label>
                         </div>
 
@@ -133,7 +134,7 @@ const SalesJournal = () => {
                                         required={formData.isCustom}
                                     />
                                 </div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5px' }}>
+                                <div className="journal-form-grid">
                                     <div>
                                         <label>Category:</label>
                                         <input
@@ -174,11 +175,11 @@ const SalesJournal = () => {
                             />
                         </div>
 
-                        <div style={{ margin: '10px 0', padding: '10px', textAlign: 'center', background: '#eee', borderRadius: '4px' }}>
+                        <div className="journal-total-display">
                             <strong>Total: {totalPrice.toLocaleString()}</strong>
                         </div>
 
-                        <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>Save</button>
+                        <button type="submit" className="btn btn-primary journal-submit-button">Save</button>
                     </form>
                 </div>
 
@@ -186,7 +187,7 @@ const SalesJournal = () => {
                 <div className="journal-list">
                     <div className="card">
                         <h3>Transactions List</h3>
-                        <div style={{ overflowX: 'auto' }}>
+                        <div className="journal-table-container">
                             <table>
                                 <thead>
                                     <tr>

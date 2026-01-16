@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { TransactionService } from '../services/storage.js';
+import '../components.css';
 import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     PieChart, Pie, Cell, Legend
@@ -104,21 +105,16 @@ const Dashboard = () => {
         <div className="dashboard-container">
             {/* Header */}
             <div className="dashboard-header">
-                <h2 style={{ margin: 0, border: 'none' }}>Dashboard</h2>
+                <h2 className="dashboard-header-title">Dashboard</h2>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <span style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>Sales Stats:</span>
-                    <div style={{ fontSize: '0.8rem' }}>
+                <div className="dashboard-sales-stats-container">
+                    <span className="dashboard-sales-stats-label">Sales Stats:</span>
+                    <div className="dashboard-sales-stats-buttons">
                         {['daily', 'weekly', 'monthly'].map(p => (
                             <button
                                 key={p}
                                 onClick={() => setStatsPeriod(p)}
-                                className="btn"
-                                style={{
-                                    marginLeft: '5px',
-                                    backgroundColor: statsPeriod === p ? 'black' : 'white',
-                                    color: statsPeriod === p ? 'white' : 'black',
-                                }}
+                                className={`btn ${statsPeriod === p ? 'dashboard-period-button-active' : 'dashboard-period-button'}`}
                             >
                                 {p}
                             </button>
@@ -130,16 +126,16 @@ const Dashboard = () => {
             {/* Stats */}
             <div className="dashboard-stats">
                 <div className="card stat-card">
-                    <h3 style={{ fontSize: '0.9rem', margin: '0 0 5px 0' }}>Total Sales</h3>
-                    <p style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: 0 }}>{totalSalesAllTime.toLocaleString()}</p>
+                    <h3 className="dashboard-stat-title">Total Sales</h3>
+                    <p className="dashboard-stat-value">{totalSalesAllTime.toLocaleString()}</p>
                 </div>
                 <div className="card stat-card">
-                    <h3 style={{ fontSize: '0.9rem', margin: '0 0 5px 0' }}>Sales ({statsPeriod})</h3>
-                    <p style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: 0 }}>{currentPeriodSales.toLocaleString()}</p>
+                    <h3 className="dashboard-stat-title">Sales ({statsPeriod})</h3>
+                    <p className="dashboard-stat-value">{currentPeriodSales.toLocaleString()}</p>
                 </div>
                 <div className="card stat-card">
-                    <h3 style={{ fontSize: '0.9rem', margin: '0 0 5px 0' }}>Transactions</h3>
-                    <p style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: 0 }}>{transactions.length}</p>
+                    <h3 className="dashboard-stat-title">Transactions</h3>
+                    <p className="dashboard-stat-value">{transactions.length}</p>
                 </div>
             </div>
 
@@ -148,26 +144,21 @@ const Dashboard = () => {
 
                 {/* Left Column: Line Chart */}
                 <div className="card chart-column-left">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                        <h3 style={{ fontSize: '1rem', margin: 0 }}>Sales Trend</h3>
+                    <div className="dashboard-chart-header">
+                        <h3 className="dashboard-chart-title">Sales Trend</h3>
                         <div>
                             {['daily', 'monthly'].map(p => (
                                 <button
                                     key={p}
                                     onClick={() => setChartPeriod(p)}
-                                    className="btn"
-                                    style={{
-                                        marginLeft: '5px',
-                                        backgroundColor: chartPeriod === p ? 'black' : 'white',
-                                        color: chartPeriod === p ? 'white' : 'black',
-                                    }}
+                                    className={`btn ${chartPeriod === p ? 'dashboard-chart-button-active' : 'dashboard-chart-button'}`}
                                 >
                                     {p}
                                 </button>
                             ))}
                         </div>
                     </div>
-                    <div className="chart-wrapper" style={{ minHeight: '450px' }}>
+                    <div className="chart-wrapper dashboard-chart-container">
                         <ResponsiveContainer width="100%" height={450} debounce={1}>
                             <LineChart data={lineChartData} margin={{ top: 5, right: 30, left: 20, bottom: 25 }} style={{ fontFamily: 'Arial, sans-serif' }}>
                                 <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
@@ -194,10 +185,10 @@ const Dashboard = () => {
 
                     {/* Top Items - Upper Half */}
                     <div className="card top-items-wrapper">
-                        <h3 style={{ fontSize: '1rem', margin: '0 0 10px 0' }}>Top 5 Items</h3>
-                        <ul style={{ padding: 0, margin: 0, listStyle: 'none' }}>
+                        <h3 className="dashboard-top-items-title">Top 5 Items</h3>
+                        <ul className="dashboard-top-items-list">
                             {topItems.map((item, idx) => (
-                                <li key={idx} style={{ marginBottom: '5px', paddingBottom: '2px', borderBottom: '1px solid #eee', fontSize: '0.9rem', display: 'flex', justifyContent: 'space-between' }}>
+                                <li key={idx} className="dashboard-top-items-item">
                                     <span>{idx + 1}. {item.name}</span>
                                     <strong>{item.qty}</strong>
                                 </li>
@@ -207,7 +198,7 @@ const Dashboard = () => {
 
                     {/* Pie Chart - Lower Half */}
                     <div className="card pie-chart-wrapper">
-                        <h3 style={{ fontSize: '1rem', margin: '0 0 5px 0' }}>By Category</h3>
+                        <h3 className="dashboard-pie-chart-title">By Category</h3>
                         <div className="chart-wrapper">
                             <ResponsiveContainer width="100%" height={250} debounce={1}>
                                 <PieChart style={{ fontFamily: 'Arial, sans-serif' }}>
