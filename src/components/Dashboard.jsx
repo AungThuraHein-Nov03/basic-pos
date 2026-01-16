@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { TransactionService } from '../services/storage.js';
 import '../components.css';
 import {
@@ -11,16 +11,15 @@ import {
 } from 'date-fns';
 
 const Dashboard = () => {
-    const [transactions, setTransactions] = useState([]);
+    const [rawTransactions] = useState(TransactionService.getTransactions());
     const [statsPeriod, setStatsPeriod] = useState('monthly');
     const [chartPeriod, setChartPeriod] = useState('monthly');
 
     const PIE_COLORS = ['#000000', '#444444', '#888888', '#aaaaaa', '#cccccc', '#eeeeee'];
 
-    useEffect(() => {
-        const data = TransactionService.getTransactions();
-        setTransactions(data.sort((a, b) => new Date(a.date) - new Date(b.date)));
-    }, []);
+    const transactions = useMemo(() => {
+        return rawTransactions.sort((a, b) => new Date(a.date) - new Date(b.date));
+    }, [rawTransactions]);
 
     const totalSalesAllTime = useMemo(() => {
         return transactions.reduce((sum, t) => sum + t.totalPrice, 0);
@@ -82,7 +81,7 @@ const Dashboard = () => {
                 const key = chartPeriod === 'monthly'
                     ? format(tDate, 'MMM yyyy')
                     : format(tDate, 'MMM dd');
-                if (dataMap.hasOwnProperty(key)) {
+                if (Object.prototype.hasOwnProperty.call(dataMap, key)) {
                     dataMap[key] += t.totalPrice;
                 }
             }

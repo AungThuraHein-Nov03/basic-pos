@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { TransactionService } from '../services/storage.js';
 import '../components.css';
 
 const SalesJournal = () => {
-    const [products, setProducts] = useState([]);
-    const [transactions, setTransactions] = useState([]);
+    const [products] = useState(() => TransactionService.getProducts());
+    const [transactions, setTransactions] = useState(() => TransactionService.getTransactions());
     const [formData, setFormData] = useState({
         productId: '',
         customName: '',
@@ -14,11 +14,6 @@ const SalesJournal = () => {
         customPrice: 0,
         customCategory: 'other'
     });
-
-    useEffect(() => {
-        setProducts(TransactionService.getProducts());
-        setTransactions(TransactionService.getTransactions());
-    }, []);
 
     const selectedProduct = useMemo(() => {
         return products.find(p => p.itemName === formData.productId);
