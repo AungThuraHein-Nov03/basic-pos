@@ -13,9 +13,9 @@ This is a simple Point of Sale (POS) application built with React. It lists prod
 ## Features
 
 - **Dashboard**: View sales stats, trends, and top-selling items.
-- **Sales Journal**: Record new sales and view transaction history.
+- **Sales Journal**: Record new sales and view all transaction history.
 - **Custom Expenses**: Support for adding custom items or expenses.
-- **Data Persistence**: All data is saved locally in the browser.
+- **Dark Mode**: High-contrast dark theme with blue accents.
 
 ## Screenshots
 
@@ -36,4 +36,7 @@ This is a simple Point of Sale (POS) application built with React. It lists prod
 
 ### Sales Journal - Product Selection
 ![Product Selection](./screenshots/select_product.png)
+
+### Dark Mode - Enhanced Visibility
+![Dark Mode Dashboard](./screenshots/dark_theme.png)
 
