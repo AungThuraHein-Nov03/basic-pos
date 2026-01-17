@@ -6,9 +6,9 @@ This is a simple Point of Sale (POS) application built with React. It lists prod
 
 ## Members
 
-**Sithu Win San**
+- **Sithu Win San**
 
-**Aung Thura Hein**
+- **Aung Thura Hein**
 
 ## Features
 
