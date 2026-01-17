@@ -1,7 +1,10 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext.jsx';
 
 const Layout = () => {
+    const { theme, toggleTheme } = useTheme();
+
     return (
         <div className="app-layout">
             {/* Sidebar / Navigation */}
@@ -26,6 +29,14 @@ const Layout = () => {
                     </NavLink>
                 </nav>
 
+                <button
+                    className="btn theme-toggle-btn"
+                    onClick={toggleTheme}
+                    title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+                >
+                    {theme === 'light' ? '🌙' : '☀️'}
+                </button>
+
                 <div className="sidebar-user">
                     User: Sithu
                 </div>
@@ -40,3 +51,4 @@ const Layout = () => {
 };
 
 export default Layout;
+

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { TransactionService } from '../services/storage.js';
-import '../components.css';
+import '../index.css';
 
 const SalesJournal = () => {
     const [products] = useState(() => TransactionService.getProducts());
@@ -198,7 +198,7 @@ const SalesJournal = () => {
                                     {transactions.length === 0 ? (
                                         <tr><td colSpan="6">No records.</td></tr>
                                     ) : (
-                                        transactions.slice(0, 50).map((t) => (
+                                        transactions.map((t) => (
                                             <tr key={t.id}>
                                                 <td>{t.date}</td>
                                                 <td>

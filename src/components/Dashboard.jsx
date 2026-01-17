@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { TransactionService } from '../services/storage.js';
-import '../components.css';
+import '../index.css';
+import { useTheme } from '../context/ThemeContext.jsx';
 import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     PieChart, Pie, Cell, Legend
@@ -14,8 +15,15 @@ const Dashboard = () => {
     const [rawTransactions] = useState(TransactionService.getTransactions());
     const [statsPeriod, setStatsPeriod] = useState('monthly');
     const [chartPeriod, setChartPeriod] = useState('monthly');
+    const { theme } = useTheme();
 
-    const PIE_COLORS = ['#000000', '#444444', '#888888', '#aaaaaa', '#cccccc', '#eeeeee'];
+    const PIE_COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF4560'];
+
+    // Theme-based colors
+    const textColor = theme === 'dark' ? '#e0e0e0' : 'black';
+    const gridColor = theme === 'dark' ? '#1e4d8c' : '#ccc';
+    const lineColor = theme === 'dark' ? '#3b82f6' : 'black';
+    const tooltipBg = theme === 'dark' ? '#0f3460' : '#ffffff';
 
     const transactions = useMemo(() => {
         return rawTransactions.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -159,21 +167,24 @@ const Dashboard = () => {
                     </div>
                     <div className="chart-wrapper dashboard-chart-container">
                         <ResponsiveContainer width="100%" height={450} debounce={1}>
-                            <LineChart data={lineChartData} margin={{ top: 5, right: 30, left: 20, bottom: 25 }} style={{ fontFamily: 'Arial, sans-serif' }}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
+                            <LineChart data={lineChartData} margin={{ top: 5, right: 30, left: 20, bottom: 25 }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
                                 <XAxis
                                     dataKey="name"
-                                    stroke="black"
-                                    style={{ fontSize: '0.7rem', fontFamily: 'Arial' }}
-                                    label={{ value: 'Date', position: 'insideBottom', offset: -15, fontSize: '0.8rem', fontFamily: 'Arial' }}
+                                    stroke={textColor}
+                                    tick={{ fontSize: '0.7rem', fontFamily: "Arial, 'sans-serif'", fill: textColor }}
+                                    label={{ value: 'Date', position: 'insideBottom', offset: -15, fontSize: '0.8rem', fontFamily: "Arial, 'sans-serif'", fill: textColor }}
                                 />
                                 <YAxis
-                                    stroke="black"
-                                    style={{ fontSize: '0.7rem', fontFamily: 'Arial' }}
-                                    label={{ value: 'Sales ($)', angle: -90, position: 'insideLeft', fontSize: '0.8rem', fontFamily: 'Arial' }}
+                                    tick={{ fontSize: '0.7rem', fontFamily: "Arial, 'sans-serif'", fill: textColor }}
+                                    label={{ value: 'Sales ($)', angle: -90, position: 'insideLeft', fontSize: '0.8rem', fontFamily: "Arial, 'sans-serif'", fill: textColor }}
                                 />
-                                <Tooltip contentStyle={{ fontFamily: 'Arial' }} />
-                                <Line type="monotone" dataKey="value" stroke="black" dot={{ r: 2 }} activeDot={{ r: 4 }} />
+                                <Tooltip
+                                    contentStyle={{ fontFamily: "Arial, 'sans-serif'", backgroundColor: tooltipBg, borderColor: gridColor, color: textColor }}
+                                    labelStyle={{ color: textColor }}
+                                    itemStyle={{ color: textColor }}
+                                />
+                                <Line type="monotone" dataKey="value" isAnimationActive={false} stroke={lineColor} dot={{ r: 2, fill: lineColor }} activeDot={{ r: 4 }} />
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
@@ -200,24 +211,43 @@ const Dashboard = () => {
                         <h3 className="dashboard-pie-chart-title">By Category</h3>
                         <div className="chart-wrapper">
                             <ResponsiveContainer width="100%" height={250} debounce={1}>
-                                <PieChart style={{ fontFamily: 'Arial, sans-serif' }}>
+                                <PieChart>
                                     <Pie
                                         data={pieChartData}
+                                        isAnimationActive={false}
                                         cx="50%"
                                         cy="50%"
                                         outerRadius="60%"
                                         fill="#8884d8"
                                         dataKey="value"
-                                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                                        labelLine={true}
-                                        style={{ fontSize: '0.7rem', fontFamily: 'Arial' }}
+                                        label={(props) => (
+                                            <text
+                                                x={props.x}
+                                                y={props.y}
+                                                fill={textColor}
+                                                textAnchor={props.textAnchor}
+                                                dominantBaseline="central"
+                                                style={{ fontSize: '0.7rem', fontFamily: "Arial, 'sans-serif'" }}
+                                            >
+                                                {`${props.name} ${(props.percent * 100).toFixed(0)}%`}
+                                            </text>
+                                        )}
+                                        labelLine={{ stroke: textColor }}
                                     >
                                         {pieChartData.map((entry, index) => (
                                             <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                                         ))}
                                     </Pie>
-                                    <Tooltip wrapperStyle={{ fontSize: '0.8rem', fontFamily: 'Arial' }} contentStyle={{ fontFamily: 'Arial' }} />
-                                    <Legend wrapperStyle={{ fontSize: '0.7rem', fontFamily: 'Arial' }} />
+                                    <Tooltip
+                                        wrapperStyle={{ fontSize: '0.8rem', fontFamily: "Arial, 'sans-serif'" }}
+                                        contentStyle={{ fontFamily: "Arial, 'sans-serif'", backgroundColor: tooltipBg, borderColor: gridColor, color: textColor }}
+                                        labelStyle={{ color: textColor }}
+                                        itemStyle={{ color: textColor }}
+                                    />
+                                    <Legend
+                                        wrapperStyle={{ fontSize: '0.7rem', fontFamily: "Arial, 'sans-serif'" }}
+                                        formatter={(value) => <span style={{ color: textColor }}>{value}</span>}
+                                    />
                                 </PieChart>
                             </ResponsiveContainer>
                         </div>
@@ -231,3 +261,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+

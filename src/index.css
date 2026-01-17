@@ -1,24 +1,111 @@
-:root {
-  --color-bg: #ffffff;
-  --color-text: #000000;
-  --color-border: #000000;
-  --font-family: 'Arial', sans-serif;
+* {
+  box-sizing: border-box;
+  font-family: Arial, 'sans-serif' !important;
+}
+
+/* ========================================
+   LIGHT THEME (Default)
+   ======================================== */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #ffffff;
+  color: #000000;
+  margin: 0;
+  padding: 0;
   font-size: 14px;
 }
 
-* {
-  box-sizing: border-box;
+/* ========================================
+   DARK THEME
+   ======================================== */
+[data-theme="dark"] body {
+  background-color: #1a1a2e;
+  color: #e0e0e0;
 }
 
-body {
-  font-family: var(--font-family);
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  margin: 0;
-  padding: 0;
+[data-theme="dark"] .app-sidebar {
+  background: #16213e;
 }
 
-/* Basic Layout Utilities */
+[data-theme="dark"] .app-main {
+  background: #1a1a2e;
+}
+
+[data-theme="dark"] .card {
+  background: #0f3460;
+  border-color: #1e4d8c;
+}
+
+[data-theme="dark"] .btn {
+  background: #0f3460;
+  color: #e0e0e0;
+  border-color: #1e4d8c;
+}
+
+[data-theme="dark"] .btn:hover {
+  background: #1e4d8c;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .btn-primary {
+  background: #3b82f6;
+  color: #ffffff;
+  border-color: #3b82f6;
+}
+
+[data-theme="dark"] .btn-primary:hover {
+  background: #60a5fa;
+}
+
+[data-theme="dark"] .dashboard-period-button-active,
+[data-theme="dark"] .dashboard-chart-button-active {
+  background: #3b82f6;
+  color: #ffffff;
+  border-color: #3b82f6;
+}
+
+[data-theme="dark"] .input {
+  background: #16213e;
+  color: #e0e0e0;
+  border-color: #1e4d8c;
+}
+
+[data-theme="dark"] nav a {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] nav a.active {
+  border-bottom-color: #3b82f6;
+}
+
+[data-theme="dark"] th {
+  background-color: #0f3460;
+}
+
+[data-theme="dark"] th,
+[data-theme="dark"] td {
+  border-bottom-color: #1e4d8c;
+}
+
+[data-theme="dark"] .journal-total-display {
+  background: #0f3460;
+}
+
+[data-theme="dark"] .dashboard-top-items-item {
+  border-bottom-color: #1e4d8c;
+}
+
+[data-theme="dark"] .sidebar-title {
+  color: #3b82f6;
+}
+
+[data-theme="dark"] .sidebar-user {
+  color: #8888aa;
+}
+
+/* ========================================
+   BASIC LAYOUT UTILITIES
+   ======================================== */
 .container {
   max-width: 960px;
   margin: 0 auto;
@@ -29,7 +116,6 @@ body {
   padding: 12px;
   margin-bottom: 15px;
   background: #f8f8f8;
-  /* Very light gray instead of border */
   border-radius: 4px;
 }
 
@@ -41,7 +127,6 @@ h3 {
   padding-bottom: 2px;
   font-size: 1.1rem;
   font-weight: 800;
-  /* Bolder titles for clear UI without lines */
 }
 
 h2 {
@@ -52,29 +137,33 @@ h3 {
   font-size: 1rem;
 }
 
-/* Basic Inputs */
+/* ========================================
+   BASIC INPUTS
+   ======================================== */
 .input {
   display: block;
   width: 100%;
   padding: 6px 10px;
   margin-bottom: 8px;
   border: 1px solid #ccc;
-  /* Subtle border for input is usually necessary */
   font-size: 0.95rem;
   border-radius: 4px;
+  font-family: 'Arial', sans-serif;
 }
 
-/* Basic Buttons */
+/* ========================================
+   BASIC BUTTONS
+   ======================================== */
 .btn {
   background: white;
   border: 1px solid black;
   padding: 6px 14px;
-  /* Increased size */
   cursor: pointer;
   font-weight: bold;
   font-size: 0.95rem;
   border-radius: 4px;
   transition: all 0.2s ease;
+  font-family: 'Arial', sans-serif;
 }
 
 .btn:hover {
@@ -91,19 +180,29 @@ h3 {
   background: #333;
 }
 
-/* Table */
+/* Theme Toggle Button */
+.theme-toggle-btn {
+  font-size: 1.2rem;
+  padding: 8px 12px;
+  margin-top: auto;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+/* ========================================
+   TABLE
+   ======================================== */
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
+  font-family: 'Arial', sans-serif;
 }
 
 th,
 td {
   border-bottom: 1px solid #eee;
-  /* Light horizontal lines only */
   padding: 8px 4px;
-  /* Increased padding */
   text-align: left;
   font-size: 0.9rem;
 }
@@ -113,8 +212,11 @@ th {
   font-weight: bold;
 }
 
-/* Navigation */
+/* ========================================
+   NAVIGATION
+   ======================================== */
 nav {
+  margin-top: 12px;
   margin-bottom: 20px;
   padding-bottom: 10px;
 }
@@ -125,14 +227,16 @@ nav a {
   color: black;
   font-weight: bold;
   padding: 5px 0;
+  font-family: 'Arial', sans-serif;
 }
 
 nav a.active {
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid hsl(0, 0%, 58%);
 }
 
-
-/* App Layout */
+/* ========================================
+   APP LAYOUT
+   ======================================== */
 .app-layout {
   display: flex;
   height: 100vh;
@@ -160,6 +264,7 @@ nav a.active {
   font-size: 22px;
   font-weight: 900;
   letter-spacing: -0.5px;
+  font-family: 'Arial', sans-serif;
 }
 
 .sidebar-nav {
@@ -169,13 +274,19 @@ nav a.active {
 }
 
 .sidebar-user {
-  margin-top: auto;
-  padding-top: 15px;
+  padding-top: 10px;
   font-size: 0.85rem;
   color: #666;
+  border-top: 1px solid #eee;
 }
 
-/* Sales Journal Layout */
+[data-theme="dark"] .sidebar-user {
+  border-top-color: #1e4d8c;
+}
+
+/* ========================================
+   SALES JOURNAL LAYOUT
+   ======================================== */
 .journal-container {
   display: flex;
   gap: 20px;
@@ -190,10 +301,55 @@ nav a.active {
 .journal-list {
   flex: 1;
   width: 100%;
-  /* Ensure full width when stacked */
 }
 
-/* Dashboard Layout Classes */
+.journal-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.journal-custom-checkbox-container {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.journal-custom-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.journal-custom-checkbox-text {
+  font-size: 0.9rem;
+}
+
+.journal-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+}
+
+.journal-total-display {
+  margin: 10px 0;
+  padding: 10px;
+  text-align: center;
+  background: #eee;
+  border-radius: 4px;
+}
+
+.journal-submit-button {
+  width: 100%;
+}
+
+.journal-table-container {
+  overflow-x: auto;
+}
+
+/* ========================================
+   DASHBOARD LAYOUT
+   ======================================== */
 .dashboard-container {
   display: flex;
   flex-direction: column;
@@ -208,6 +364,39 @@ nav a.active {
   flex-shrink: 0;
 }
 
+.dashboard-header-title {
+  margin: 0;
+  border: none;
+}
+
+.dashboard-sales-stats-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dashboard-sales-stats-label {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.dashboard-sales-stats-buttons {
+  font-size: 0.8rem;
+}
+
+.dashboard-period-button,
+.dashboard-period-button-active,
+.dashboard-chart-button,
+.dashboard-chart-button-active {
+  margin-left: 5px;
+}
+
+.dashboard-period-button-active {
+  background: black;
+  color: white;
+  border-color: black;
+}
+
 .dashboard-stats {
   display: flex;
   gap: 10px;
@@ -220,6 +409,17 @@ nav a.active {
   padding: 10px;
   margin-bottom: 0;
   text-align: center;
+}
+
+.dashboard-stat-title {
+  font-size: 0.9rem;
+  margin: 0 0 5px 0;
+}
+
+.dashboard-stat-value {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0;
 }
 
 .dashboard-main {
@@ -246,25 +446,76 @@ nav a.active {
   width: 100%;
 }
 
+.dashboard-chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.dashboard-chart-title {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.dashboard-chart-button {
+  margin-left: 5px;
+}
+
+.dashboard-chart-button-active {
+  background: black;
+  color: white;
+  border-color: black;
+}
+
+.dashboard-chart-container {
+  min-height: 450px;
+}
+
 .top-items-wrapper {
   flex: 1;
   padding: 10px;
   min-height: 200px;
   margin-bottom: 0px;
-  /* Force visibility */
   overflow: auto;
+}
+
+.dashboard-top-items-title {
+  font-size: 1rem;
+  margin: 0 0 10px 0;
+}
+
+.dashboard-top-items-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.dashboard-top-items-item {
+  margin-bottom: 5px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: space-between;
 }
 
 .pie-chart-wrapper {
   flex: 1;
   padding: 10px;
   min-height: 300px;
-  /* Force visibility */
   display: flex;
   flex-direction: column;
 }
 
-/* Mobile Responsiveness */
+.dashboard-pie-chart-title {
+  font-size: 1rem;
+  margin: 0 0 5px 0;
+}
+
+/* ========================================
+   MOBILE RESPONSIVENESS
+   ======================================== */
 @media (max-width: 768px) {
   .app-layout {
     flex-direction: column;
@@ -277,29 +528,43 @@ nav a.active {
     border-bottom: 1px solid black;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-    padding: 5px 10px;
+    justify-content: flex-start;
+    padding: 10px 15px;
+    gap: 20px;
   }
 
   .sidebar-title {
     margin-bottom: 0;
     font-size: 16px;
+    flex-shrink: 0;
   }
 
   .sidebar-nav {
     flex-direction: row;
     align-items: center;
     gap: 15px;
+    margin-bottom: 0;
+  }
+
+  .sidebar-nav a {
+    margin-right: 0;
+    white-space: nowrap;
+  }
+
+  .theme-toggle-btn {
+    width: auto;
+    margin-top: 0;
+    margin-left: auto;
+    padding: 5px 10px;
+    font-size: 1rem;
   }
 
   .sidebar-user {
     display: none;
-    /* Hide user on mobile to save space, or move it */
   }
 
   .app-main {
     padding: 5px;
-    /* Reduce padding on mobile */
   }
 
   .dashboard-container {
@@ -315,12 +580,10 @@ nav a.active {
   .dashboard-stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    /* 2 columns for stats */
   }
 
   .dashboard-stats .card:last-child {
     grid-column: span 2;
-    /* Make the last one full width if odd number */
   }
 
   .dashboard-main {
@@ -337,12 +600,9 @@ nav a.active {
   .chart-wrapper {
     flex: none;
     height: 300px;
-    /* Fixed height for mobile charts */
     min-height: 300px;
     width: 100%;
   }
-
-
 
   .top-items-wrapper {
     margin-top: -12px;
@@ -357,15 +617,14 @@ nav a.active {
 
   .journal-form {
     width: 100%;
-    /* Full width on mobile */
   }
 
   .journal-list {
     overflow-x: auto;
-    /* Enable horizontal scroll for table if needed */
   }
 }
 
-nav a.active {
-  text-decoration: underline;
+/* Dark theme mobile border */
+[data-theme="dark"] .app-sidebar {
+  border-bottom-color: #1e4d8c;
 }
