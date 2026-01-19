@@ -32,7 +32,7 @@ export const TransactionService = {
         }
     },
 
-    // Clear all transactions (helper for testing)
+    // Clear all transactions
     clearTransactions: () => {
         localStorage.removeItem(STORAGE_KEY);
     },
