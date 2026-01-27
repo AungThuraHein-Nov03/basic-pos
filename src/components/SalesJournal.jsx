@@ -22,6 +22,45 @@ const SalesJournal = () => {
     const unitPrice = formData.isCustom ? formData.customPrice : (selectedProduct?.unitPrice || 0);
     const totalPrice = unitPrice * formData.quantity;
 
+    
+    const [sortConfig, setSortConfig] = useState({ key: null, direction: 'descending' });
+
+    
+    const sortedTransactions = useMemo(() => {
+        let sortableItems = [...transactions];
+        if (sortConfig.key) {
+            sortableItems.sort((a, b) => {
+                let valueA = a[sortConfig.key];
+                let valueB = b[sortConfig.key];
+                if (typeof valueA === 'string') valueA = valueA.toLowerCase();
+                if (typeof valueB === 'string') valueB = valueB.toLowerCase();
+                if (valueA < valueB) {
+                    return sortConfig.direction === 'ascending' ? -1 : 1;
+                }
+                if (valueA > valueB) {
+                    return sortConfig.direction === 'ascending' ? 1 : -1;
+                }
+                return 0;
+            });
+        }
+        return sortableItems;
+    }, [transactions, sortConfig]);
+
+    const handleSort = (key) => {
+        let direction = 'ascending';
+        if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+            direction = 'descending';
+        }
+        setSortConfig({ key, direction });
+    };
+
+    const getSortIndicator = (key) => {
+        if (sortConfig.key === key) {
+            return sortConfig.direction === 'ascending' ? ' ↑' : ' ↓';
+        }
+        return '';
+    };
+
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData(prev => ({
@@ -182,23 +221,49 @@ const SalesJournal = () => {
                 <div className="journal-list">
                     <div className="card">
                         <h3>Transactions List</h3>
+
+                        <div style={{ marginBottom: '1rem', display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                            <strong>Sort by:</strong>
+                            <button
+                                type="button"
+                                onClick={() => handleSort('totalPrice')}
+                                style={{ padding: '4px 8px', cursor: 'pointer' }}
+                            >
+                                Total Price{getSortIndicator('totalPrice')}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => handleSort('category')}
+                                style={{ padding: '4px 8px', cursor: 'pointer' }}
+                            >
+                                Category{getSortIndicator('category')}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => handleSort('quantity')}
+                                style={{ padding: '4px 8px', cursor: 'pointer' }}
+                            >
+                                Quantity Sold{getSortIndicator('quantity')}
+                            </button>
+                        </div>
+
                         <div className="journal-table-container">
                             <table>
                                 <thead>
                                     <tr>
                                         <th>Date</th>
                                         <th>Item</th>
-                                        <th>Cat</th>
-                                        <th>Qty</th>
-                                        <th>Unit</th>
-                                        <th>Total</th>
+                                        <th>Category</th>
+                                        <th>Qantity</th>
+                                        <th>Unit Price</th>
+                                        <th>Total Price</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {transactions.length === 0 ? (
+                                    {sortedTransactions.length === 0 ? (
                                         <tr><td colSpan="6">No records.</td></tr>
                                     ) : (
-                                        transactions.map((t) => (
+                                        sortedTransactions.map((t) => (
                                             <tr key={t.id}>
                                                 <td>{t.date}</td>
                                                 <td>
