@@ -36,3 +36,6 @@ The Sales Journal allows for efficient transaction recording and product managem
 ### Dark Mode Support
 ![Dark Theme](./src/assets/dark_theme.png)
 
+
+### Deployment Link 
+https://aungthurahein-nov03.github.io/basic-pos-deployment/
