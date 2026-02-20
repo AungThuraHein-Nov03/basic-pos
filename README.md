@@ -31,7 +31,7 @@ The Sales Journal allows for efficient transaction recording and product managem
 
 | Sales Journal Overview | Product Selection | Custom Item Entry |
 |:---:|:---:|:---:|
-| ![Sales Journal](./src/assets/sales_journal.png) | ![Product Selection](./src/assets/sales_journal_select_product.png) | ![Custom Item Entry](./src/assets/sales_journal_custom_item.png) |
+| ![Sales Journal](./src/assets/sales_journal2.png) | ![Product Selection](./src/assets/sales_journal_select_product.png) | ![Custom Item Entry](./src/assets/sales_journal_custom_item.png) |
 
 ### Dark Mode Support
 ![Dark Theme](./src/assets/dark_theme.png)
